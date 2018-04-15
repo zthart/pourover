@@ -1,9 +1,22 @@
 # Pourover: Log Parsing for Lizards
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+![python](https://img.shields.io/badge/python-3.6-blue.svg)
 
 Pourover is the only _chemicaly-altered_ CEF Log Parsing library for Python, ideal for consumption by Lizard People.
 
 ![the requests guy does it so maybe it'll work for me](https://user-images.githubusercontent.com/4873335/38774515-0f0b5514-4039-11e8-8437-facadd57a85c.jpg)
+
+Some stuff we can do:
+```python
+>>> import pourover
+>>> line = pourover.parse_line('CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|')
+>>> line.has_syslog_prefix
+False
+>>> line.has_extensions
+False
+>>> print(line)
+CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|
+```
 
 ## :crocodile: Features :crocodile:
 
