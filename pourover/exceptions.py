@@ -10,4 +10,9 @@ class PouroverException(ValueError):
     """ Generic Exception that may have occured doing something CEF related """
     def __init__(self, *args, **kwargs):
         """ Initialize PouroverException """
-        pass
+        self.line = kwargs.pop('line', None)
+        super(PouroverException, self).__init__(*args, **kwargs)
+
+
+class CEFLineError(PouroverException):
+    """ A formatting error was found in a line meant to be in CEF format """
