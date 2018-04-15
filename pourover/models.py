@@ -51,7 +51,7 @@ class CEFLog(object):
 
     def __iter__(self):
         """ Allows you to use the log object as an iterator to interact with the lines. """
-        return self.lines
+        return self.lines.__iter__()
 
     def append(self, line):
         """ Add a line to the log
