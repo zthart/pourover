@@ -8,6 +8,8 @@ This module contains parsing functions provided by pourover
 :license: Apache 2.0, see LICENSE for more details.
 """
 
+HEADER_SEP = r'(.*(?<!\\)\|){,7}(.*)'
+HEADER_SPLIT = r'(?<!\\)\|'
 
 def parse_line(line):
     """ Parse a CEF formatted log line
@@ -37,7 +39,7 @@ def parse_file(filepath):
     pass
 
 
-def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, name, severity, **kwargs):
+def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, name, severity, set_syslog_prefix=False, **kwargs):
     """ Return a CEF formatted log line from header values and any extensions
 
     Format CEF header values plus any provided key-value pairs of extensions into a CEF formatted log line
@@ -49,6 +51,7 @@ def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, nam
     :param signature_id: Signature Id
     :param name: Name
     :param severity: Severity
+    :param set_syslog_prefix: Optionally include the syslog timestamp and host
     :param kwargs: key-value pairs of extensions
     :type version: int
     :type dev_vendor: str
@@ -57,6 +60,7 @@ def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, nam
     :type signature_id: str
     :type name: str
     :type severity: int
+    :type set_syslog_prefix: bool
     :return: a CEF formatted log line
     :rtype: str
     """
