@@ -11,6 +11,7 @@ This module contains parsing functions provided by pourover
 HEADER_SEP = r'(.*(?<!\\)\|){,7}(.*)'
 HEADER_SPLIT = r'(?<!\\)\|'
 
+
 def parse_line(line):
     """ Parse a CEF formatted log line
 

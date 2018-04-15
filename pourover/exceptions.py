@@ -3,6 +3,9 @@
 """ pourover.exceptions
 
 This module contains exceptions raised by Pourover
+
+:copyright: (c) Zachary Hart
+:license: Apache 2.0, see LICENSE for more details.
 """
 
 
