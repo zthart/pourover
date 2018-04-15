@@ -20,8 +20,8 @@ def parse_line(line):
 
     :param line: A CEF formatted line, beginning with a CEF header and ending in any present extensions
     :type line: str
-    :return: Key-Value pairs of CEF headers and extensions
-    :rtype: dict
+    :return: The parsed line object
+    :rtype: :class:`CEFLine <CEFLine>`
     """
     pass
 
@@ -34,8 +34,8 @@ def parse_file(filepath):
 
     :param filepath: The file to parse log lines from
     :type filepath: str
-    :return: A list of key-value pair sets of CEF headers and extensions
-    :rtype: list
+    :return: The parsed log object
+    :rtype: :class:`CEFLog <CEFLog>`
     """
     pass
 
