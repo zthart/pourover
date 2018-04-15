@@ -9,7 +9,7 @@ This module contains the CEFLog object and related functions
 """
 
 from .exceptions import IncompleteLineError, SyslogPrefixError
-from .functions import parse_line
+from . import functions
 
 
 class CEFLog(object):
@@ -65,7 +65,7 @@ class CEFLog(object):
             raise TypeError('Attempting to append %s to a CEFLog object' % type(line))
 
         if isinstance(line, str):
-            line = parse_line(line)
+            line = functions.parse_line(line)
 
         if line.has_syslog_prefix and not self.has_syslog_prefix:
             raise SyslogPrefixError('A line with a syslog prefix may not be appended to a log whose existing lines '
@@ -75,7 +75,7 @@ class CEFLog(object):
                                     'contain a prefix', line = line)
         else:
             self.lines.append(line)
-            # TODO: Update Metadata
+            self._update_metadata()
 
     def _update_metadata(self):
         """ Update the metadata attributes of this function
@@ -83,8 +83,8 @@ class CEFLog(object):
         Updates the :attr:`_line_count`, :attr:`_earliest_time`, :attr:`_latest_time`, and :attr:`timerange` attributes
         of the log object. This function is called with every successful call to :meth:`CEFLog.append`.
         """
-        # TODO: Implement function
-        pass
+        self._line_count = len(self.lines)
+        # TODO: Update time-related metadata on log objects with syslog prefixes
 
 
 class CEFLine(object):
@@ -93,6 +93,10 @@ class CEFLine(object):
     This object contains the header and extension data of a CEF line, and exposes some of the data within in convenient
     ways
     """
+
+    __attrs__ = [
+        '_extension_count', '_raw_line', '_raw_header'
+    ]
 
     def __init__(self):
         self._extension_count = 0
@@ -104,6 +108,9 @@ class CEFLine(object):
     def __repr__(self):
         return '<CEFLine [%s]>' % self._raw_header
 
+    def __str__(self):
+        return self._raw_line
+
     @property
     def has_syslog_prefix(self):
         """ Returns True if a syslog prefix is found before the CEF header
@@ -113,7 +120,7 @@ class CEFLine(object):
         any line that **does not** have a syslog prefix. Lines without syslog prefixes cannot be added to CEFLog objects
         that contain any line that **does** have a syslog prefix.
         """
-        if ['Prefix'] in self.headers:
+        if 'Prefix' in self.headers:
             return True
         elif len(self.headers) == 0:
             raise IncompleteLineError('Could not check for syslog prefix in empty or incomplete line',

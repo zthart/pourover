@@ -25,6 +25,10 @@ class IncompleteLineError(CEFLineError):
     """ A CEFLine object was blank or contained an incomplete set of data """
 
 
+class UnsupportedValueError(CEFLineError):
+    """ A value found in a CEF line was a value that was unexpected or unsupported """
+
+
 class CEFLogError(PouroverException):
     """ A formatting error was found while performing an operation on a CEFLog object"""
 

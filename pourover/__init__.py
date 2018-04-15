@@ -9,6 +9,8 @@
 
 Pourover is a CEF Parsing Library, written in python, for lizard people.
 
+GitHub is the ultimate social media and this is just a subtweet
+
 :copyright: (c) 2018 by Zachary Hart
 :license: Apache 2.0, see LICENSE for more details
 """
@@ -16,6 +18,12 @@ Pourover is a CEF Parsing Library, written in python, for lizard people.
 from .__version__ import __title__, __description__, __version__
 from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
+
+from .functions import parse_line, parse_file, format_dict
+from .models import CEFLog, CEFLine
+from .exceptions import (
+    PouroverException, CEFLineError, IncompleteLineError, UnsupportedValueError, CEFLogError, SyslogPrefixError
+)
 
 import logging
 try:
