@@ -31,7 +31,10 @@ False
 
 ## :crocodile: Features :crocodile:
 
-This is a WIP project - check back as more features are added
+* :dragon_face: Create CEF-formatted log lines from parameters with support for extensions and a syslog prefix
+* :dragon_face: Iterable log objects to manipulate collections of logs at once
+* :dragon_face: Parse lines with or without syslog prefixes _or_ extensions with ease
+* :dragon_face: **And more to come...**
 
 ## :dragon: Contributing :dragon:
 
@@ -47,6 +50,6 @@ discussion with you about a new feature you'd like to see!
 
 ## :snake: Get in Touch :snake:
 
-_If you've found a Bug or would like to make a feature requests, please see the **Contributing** section above, thanks!_
+_If you've found a Bug or would like to make a feature request, please see the **Contributing** section above, thanks!_
 
 If you'd like to reach out, shoot me an email at **[zach@csh.rit.edu](mailto:zach@csh.rit.edu)**
