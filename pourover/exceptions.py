@@ -19,3 +19,15 @@ class PouroverException(ValueError):
 
 class CEFLineError(PouroverException):
     """ A formatting error was found in a line meant to be in CEF format """
+
+
+class IncompleteLineError(CEFLineError):
+    """ A CEFLine object was blank or contained an incomplete set of data """
+
+
+class CEFLogError(PouroverException):
+    """ A formatting error was found while performing an operation on a CEFLog object"""
+
+
+class SyslogPrefixError(CEFLogError):
+    """ An inconsistency with the presence or absence of syslog prefixes was found """
