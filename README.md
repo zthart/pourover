@@ -1,5 +1,5 @@
 # Pourover: Log Parsing for Lizards
-![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
+[![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 Pourover is the only _chemicaly-altered_ CEF Log Parsing library, ideal for Lizard People™
 
