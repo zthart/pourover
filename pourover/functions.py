@@ -103,7 +103,7 @@ def parse_file(filepath):
     pass
 
 
-def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, name, severity, set_syslog_prefix=False, **kwargs):
+def create_log(version, dev_vendor, dev_product, dev_version, signature_id, name, severity, set_syslog_prefix=False, **kwargs):
     """ Return a CEF formatted log line from header values and any extensions
 
     Format CEF header values plus any provided key-value pairs of extensions into a CEF formatted log line
@@ -125,7 +125,7 @@ def format_dict(version, dev_vendor, dev_product, dev_version, signature_id, nam
     :type name: str
     :type severity: int
     :type set_syslog_prefix: bool
-    :return: a CEF formatted log line
-    :rtype: str
+    :return: A created line object
+    :rtype: :class:`CEFLine <CEFLine>`
     """
     pass
