@@ -22,6 +22,10 @@ False
 >>> for l in log:
         print(l)
 'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
+# You can create lines from parameters if you don't have a log source somewhere
+>>> line = pourover.create_line(0, 'Test Vendor', 'Test Product', 'Test Version', 100, 'Test Name', 100, set_syslog_prefix=True, hostname='testhost', src='1.1.1.1', dst='1.1.1.2')
+>>> print(line)
+'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
 ```
 
 ## :crocodile: Features :crocodile:

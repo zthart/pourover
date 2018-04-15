@@ -19,7 +19,7 @@ from .__version__ import __title__, __description__, __version__
 from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 
-from .functions import parse_line, parse_file, format_dict
+from .functions import parse_line, parse_file, create_line
 from .models import CEFLog, CEFLine
 from .exceptions import (
     PouroverException, CEFLineError, IncompleteLineError, UnsupportedValueError, CEFLogError, SyslogPrefixError

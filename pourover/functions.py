@@ -11,8 +11,9 @@ This module contains parsing functions provided by pourover
 import re
 
 from collections import OrderedDict
+from datetime import datetime
 
-from .exceptions import CEFLineError
+from .exceptions import CEFLineError, IncompleteLineError
 from .models import CEFLine, CEFLog
 
 
@@ -103,7 +104,7 @@ def parse_file(filepath):
     pass
 
 
-def create_log(version, dev_vendor, dev_product, dev_version, signature_id, name, severity, set_syslog_prefix=False, **kwargs):
+def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_id, name, severity, set_syslog_prefix=False, timestamp=None, hostname=None, **kwargs):
     """ Return a CEF formatted log line from header values and any extensions
 
     Format CEF header values plus any provided key-value pairs of extensions into a CEF formatted log line
@@ -112,20 +113,54 @@ def create_log(version, dev_vendor, dev_product, dev_version, signature_id, name
     :param dev_vendor: Device Vendor
     :param dev_product: Device Product
     :param dev_version: Device Version
-    :param signature_id: Signature Id
+    :param dev_event_class_id: Device Event Class ID
     :param name: Name
     :param severity: Severity
     :param set_syslog_prefix: Optionally include the syslog timestamp and host
+    :param timestamp: If including a syslog prefix, the time to include in the prefix. If this value is not provided,
+        the log entry will have the datetime at which this function was called
+    :param hostname: If including a syslog prefix, the hostname to include in the prefix
     :param kwargs: key-value pairs of extensions
     :type version: int
     :type dev_vendor: str
     :type dev_product: str
     :type dev_version: str
-    :type signature_id: str
+    :type dev_event_class_id: int
     :type name: str
     :type severity: int
     :type set_syslog_prefix: bool
+    :type timestamp: datetime
+    :type hostname: str
     :return: A created line object
     :rtype: :class:`CEFLine <CEFLine>`
     """
-    pass
+    # TODO: Escape special characters in parameters
+    # Join our parameters into the header with a pipe character
+    header = 'CEF:' + '|'.join(
+            [str(version), dev_vendor, dev_product, dev_version, str(dev_event_class_id), name, str(severity)]
+    ) + '|'
+
+    if set_syslog_prefix:
+        if not hostname:
+            # We need a hostname to create a syslog prefix
+            raise IncompleteLineError('No hostname was provided for the requests syslog prefix')
+        if timestamp:
+            syslog_prefix = timestamp.strftime('%b %d %H:%M:%S')
+        else:
+            syslog_prefix = datetime.utcnow().strftime('%b %d %H:%M:%S')
+
+        # add the hostname to the prefix
+        syslog_prefix = syslog_prefix + ' ' + hostname
+
+        # add the prefix to the header
+        header = syslog_prefix + ' ' + header
+
+    # add any kwargs passed as extensions
+    for k, v in kwargs.items():
+        header += '%s=%s ' % (k, v)
+
+    # remove the trailing space
+    header = header[:-1]
+
+    cefline = parse_line(header)
+    return cefline
