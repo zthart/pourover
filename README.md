@@ -14,8 +14,8 @@ Some stuff we can do:
 False
 >>> line.has_extensions
 False
->>> print(line)
-CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|
+>>> str(line)
+'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
 ```
 
 ## :crocodile: Features :crocodile:
