@@ -16,6 +16,12 @@ False
 False
 >>> str(line)
 'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
+>>> log = pourover.CEFLog()
+>>> log.append(line)
+# We've got fun iterator support too
+>>> for l in log:
+        print(l)
+'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
 ```
 
 ## :crocodile: Features :crocodile:
