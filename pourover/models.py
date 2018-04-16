@@ -21,6 +21,10 @@ class CEFLog(object):
     some file-wide metadata
     """
 
+    __attrs__ = [
+        '_line_count', '_earliest_time', '_latest_time'
+    ]
+
     def __init__(self):
         self._line_count = 0
         self._earliest_time = None
@@ -28,8 +32,6 @@ class CEFLog(object):
         self.timerange = None
 
         self.lines = []
-
-        pass
 
     @property
     def has_syslog_prefix(self):
@@ -89,6 +91,42 @@ class CEFLog(object):
         if self.has_syslog_prefix:
             self.lines.sort(key=lambda l: l.timestamp)
         # TODO: Update time-related metadata on log objects with syslog prefixes
+
+    def search_header(self, query, start_time=None, end_time=None):
+        """ Rudimentary search of the headers of the lines contained within this log
+
+        Search through the headers of all lines present in this log for the value provided, optionally with a start and
+        end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
+
+        :param query: The value for which to search
+        :param start_time: (optional) a start time to search from - defaults to time of first message in log if
+            not provided
+        :param end_time: (optional) an end time to search to - defaults to time of last message in log if not provided
+        :type query: str
+        :type start_time: datetime
+        :type end_time: datetime
+        :return: a list of log messages that contain the provided query
+        :rtype: list of :class:`CEFLine <CEFLine>`
+        """
+        pass
+
+    def search_extensions(self, query, start_time=None, end_time=None):
+        """ Rudimentary search of the extensions of the lines contained within this log
+
+        Search through the extensions of all lines present in this log for the value provided, optionally with a start
+        and end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
+
+        :param query: The value for which to search
+        :param start_time: (optional) A start time to search from - default to time of first message in log if not
+            provided
+        :param end_time: (optional) An end time to search to - defaults to time of last message in log if not provided
+        :type query: str
+        :type start_time: datetime
+        :type end_time: datetime
+        :return: a list of log messages that contain the provided query
+        :rtype: list of :class:`CEFLine <CEFLine>`
+        """
+        pass
 
 
 class CEFLine(object):
