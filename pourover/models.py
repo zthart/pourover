@@ -146,7 +146,6 @@ class CEFLine(object):
         self._raw_header = None
         self.extensions = {}
         self.headers = {}
-        self.timestamp = self._parse_timestamp()
 
     def __repr__(self):
         return '<CEFLine [%s]>' % self._raw_header
@@ -165,9 +164,6 @@ class CEFLine(object):
         """
         if 'Prefix' in self.headers:
             return True
-        elif len(self.headers) == 0:
-            raise IncompleteLineError('Could not check for syslog prefix in empty or incomplete line',
-                                      line=self)
         else:
             return False
 
@@ -176,13 +172,26 @@ class CEFLine(object):
         """ Returns True if the length of the dict of extensions is greater than zero. """
         return len(self.extensions) > 0
 
-    def _parse_timestamp(self):
+    @property
+    def timestamp(self):
+        """ Returns the datetime value found in the syslog prefix, if present
+
+        This function checks if the log line has a syslog prefix, and if so, will attempt to parse out the timestamp
+        present in the prefix. If the the object is in the future (ahead of ``utcnow()``, if we assume it came from the
+        current calendar year), the year will be set to the previous year rather than assuming that the log is from the
+        future.
+        """
         if not self.has_syslog_prefix:
             return None
         else:
             # Pull only the timestamp from the prefix, ignore the hostname
-            timestamp = self.headers['Prefix'].split(' ')[:-1]
+            timestamp = ' '.join(self.headers['Prefix'].split(' ')[:-1])
             # Parse the timestamp from the string, assume current year
-            # TODO: intelligently handle year assumption
-            timestamp = datetime.strptime(timestamp, '%b %d %H:%M:%S').replace(year=datetime.now().year)
+            timestamp = datetime.strptime(timestamp, '%b %d %H:%M:%S')
+
+            # assume that our logs are not from the future
+            if timestamp.replace(year=datetime.utcnow().year) > datetime.utcnow():
+                timestamp = timestamp.replace(year=datetime.utcnow().year - 1)
+            else:
+                timestamp = timestamp.replace(year=datetime.utcnow().year)
             return timestamp
