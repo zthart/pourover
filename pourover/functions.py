@@ -101,7 +101,14 @@ def parse_file(filepath):
     :return: The parsed log object
     :rtype: :class:`CEFLog <CEFLog>`
     """
-    pass
+    log = CEFLog()
+    with open(filepath, 'r') as logfile:
+        messages = logfile.readlines()
+        for logline in messages:
+            line = parse_line(logline)
+            log.append(line)
+
+    return log
 
 
 def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_id, name, severity, set_syslog_prefix=False, timestamp=None, hostname=None, **kwargs):

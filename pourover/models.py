@@ -21,29 +21,67 @@ class CEFLog(object):
     some file-wide metadata
     """
 
-    __attrs__ = [
-        '_line_count', '_earliest_time', '_latest_time'
-    ]
-
     def __init__(self):
-        self._line_count = 0
-        self._earliest_time = None
-        self._latest_time = None
         self.timerange = None
 
         self.lines = []
 
     @property
+    def linecount(self):
+        """ Returns the number of lines in the log object.
+
+        Uses the ``len()`` builtin to determine the number of log lines currently held by the log
+
+        :return: the number of :class:`CEFLine <CEFLine>` objects currently in the log
+        :rtype: int
+        """
+        return len(self.lines)
+
+    @property
+    def start_time(self):
+        """ Returns the timestamp of the first line in this log.
+
+        If the log is not empty (the length of the array holding lines is > 0), this property will hold the timestamp
+        of the earliest message in the log
+
+        :return: the timestamp of the first :class:`CEFLine <CEFLine>` in the log
+        :rtype: datetime
+        """
+        if not self.is_empty:
+            return self.lines[0].timestamp
+        else:
+            return None
+
+    @property
+    def end_time(self):
+        """ Returns the timestamp of the last line in this log.
+
+        If the log is not empty (the length of the arry holding lines is > 0), this property will hold the timestamp
+        of the last message in the log
+
+        :return: the timestamp of the last :class:`CEFLine <CEFLine>` in the log
+        :rtype: datetime
+        """
+        if not self.is_empty:
+            return self.lines[-1].timestamp
+        else:
+            return None
+
+    @property
     def has_syslog_prefix(self):
-        """ Returns True if the entries in the log have a syslog prefix
+        """ Returns True if the entries in the log have a syslog prefix.
 
         This attribute determines whether or not the log was created with lines that contain a syslog prefix. If the
-        log object is empty (has no lines), this property will return ``None``.
+        log object is empty (has no lines), this property will default to ``False``
+
+        :return: ``True`` the first line added to this log contains a syslog prefix, ``False`` otherwise, or if the log
+            has no lines
+        :rtype: bool
         """
         if len(self.lines) > 0:
             return self.lines[0].has_syslog_prefix
         else:
-            return None
+            return False
 
     @property
     def is_empty(self):
@@ -51,7 +89,7 @@ class CEFLog(object):
         return len(self.lines) == 0
 
     def __repr__(self):
-        return '<CEFLog [%s line%s]>' % (self._line_count, 's' if self._line_count != 1 else '')
+        return '<CEFLog [%s line%s]>' % (self.linecount, 's' if self.linecount != 1 else '')
 
     def __iter__(self):
         """ Allows you to use the log object as an iterator to interact with the lines. """
@@ -71,26 +109,13 @@ class CEFLog(object):
         if isinstance(line, str):
             line = functions.parse_line(line)
 
-        if line.has_syslog_prefix and not self.has_syslog_prefix:
-            raise SyslogPrefixError('A line with a syslog prefix may not be appended to a log whose existing lines '
-                                    'have no prefix', line=line)
-        elif not line.has_syslog_prefix and self.has_syslog_prefix:
-            raise SyslogPrefixError('A line with no syslog prefix may not be appended to a log whose existing lines '
-                                    'contain a prefix', line = line)
+        if line.has_syslog_prefix ^ self.has_syslog_prefix and not self.is_empty:
+            raise SyslogPrefixError('Cannot append lines with headers inconsistent with lines already present',
+                                    line=line)
         else:
             self.lines.append(line)
-            self._update_metadata()
-
-    def _update_metadata(self):
-        """ Update the metadata attributes of this function
-
-        Updates the :attr:`_line_count`, :attr:`_earliest_time`, :attr:`_latest_time`, and :attr:`timerange` attributes
-        of the log object. This function is called with every successful call to :meth:`CEFLog.append`.
-        """
-        self._line_count = len(self.lines)
-        if self.has_syslog_prefix:
-            self.lines.sort(key=lambda l: l.timestamp)
-        # TODO: Update time-related metadata on log objects with syslog prefixes
+            if self.has_syslog_prefix:
+                self.lines.sort(key=lambda l: l.timestamp)
 
     def search_header(self, query, start_time=None, end_time=None):
         """ Rudimentary search of the headers of the lines contained within this log
