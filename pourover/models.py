@@ -8,6 +8,8 @@ This module contains the CEFLog object and related functions
 :license: Apache 2.0, see LICENSE for more details.
 """
 
+from datetime import datetime
+
 from .exceptions import IncompleteLineError, SyslogPrefixError
 from . import functions
 
@@ -84,6 +86,8 @@ class CEFLog(object):
         of the log object. This function is called with every successful call to :meth:`CEFLog.append`.
         """
         self._line_count = len(self.lines)
+        if self.has_syslog_prefix:
+            self.lines.sort(key=lambda l: l.timestamp)
         # TODO: Update time-related metadata on log objects with syslog prefixes
 
 
@@ -104,6 +108,7 @@ class CEFLine(object):
         self._raw_header = None
         self.extensions = {}
         self.headers = {}
+        self.timestamp = self._parse_timestamp()
 
     def __repr__(self):
         return '<CEFLine [%s]>' % self._raw_header
@@ -132,3 +137,14 @@ class CEFLine(object):
     def has_extensions(self):
         """ Returns True if the length of the dict of extensions is greater than zero. """
         return len(self.extensions) > 0
+
+    def _parse_timestamp(self):
+        if not self.has_syslog_prefix:
+            return None
+        else:
+            # Pull only the timestamp from the prefix, ignore the hostname
+            timestamp = self.headers['Prefix'].split(' ')[:-1]
+            # Parse the timestamp from the string, assume current year
+            # TODO: intelligently handle year assumption
+            timestamp = datetime.strptime(timestamp, '%b %d %H:%M:%S').replace(year=datetime.now().year)
+            return timestamp
