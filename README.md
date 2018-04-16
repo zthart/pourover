@@ -8,30 +8,53 @@ Pourover is the only _chemicaly-altered_ CEF Log Parsing library for Python, ide
 
 Some stuff we can do:
 ```python
->>> import pourover
-# Parse lines from a string
->>> line = pourover.parse_line('CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|')
->>> line.has_syslog_prefix
-False
->>> line.has_extensions
-False
->>> str(line)
-'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
->>> log = pourover.CEFLog()
->>> log.append(line)
-# We've got fun iterator support too
->>> for l in log:
-        print(l)
-'CEF:0|<DeviceVendor>|<DeviceProduct>|<DeviceVersion>|<DeviceEventClassID>|<Name>|<Severity>|'
-# You can create lines from parameters if you don't have a log source somewhere also
->>> line = pourover.create_line(0, 'Test Vendor', 'Test Product', 'Test Version', 100, 'Test Name', 100, set_syslog_prefix=True, hostname='testhost', src='1.1.1.1', dst='1.1.1.2')
->>> print(line)
-'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
+from datetime import datetime
+import pourover
+
+
+# Create log objects from a file
+log = pourover.parse_file('test.log')
+
+# useful properties like linecount and start_time
+if log.linecount > 10:
+    if log.has_syslog_prefix and log.start_time > datetime(year=2018, month=4, day=20):
+        # perform some operations
+        pass
+    else:
+        # perform some operations on a logfile that doesn't have syslog prefixes
+        pass
+else:
+    # perform some operations on a really small log
+    pass
+
+for message in log:
+    # iterate through each message in the log like you'd expect to be able to
+    pass
+
+# Create line objects from a string
+line = pourover.parse_line('Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2')
+
+if line.has_syslog_prefix:
+    if line.timestamp > datetime(year=2018, month=4, day=20):
+        # perform an operation on logs from later than April 20th, 2018
+        pass
+
+if 'src' in line.extensions:
+    # do something if it's got an extension called 'src'
+    pass
+    
+if line.headers['DeviceVendor'] == 'Some Vendor':
+    # do something if the vendor is Some Vendor
+    pass
+
+# stick this line right onto that log (it'll even order the lines by timestamp - wow!)
+log.append(line)
 ```
 
 ## :crocodile: Features :crocodile:
 
 * :dragon_face: Create CEF-formatted log lines from parameters with support for extensions and a syslog prefix
+* :dragon_face: Create useful line objects from a string, or an entire log object from a file
 * :dragon_face: Iterable log objects to manipulate collections of logs at once
 * :dragon_face: Parse lines with or without syslog prefixes _or_ extensions with ease
 * :dragon_face: **And more to come...**
