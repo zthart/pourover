@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-""" pourover.ceflog
+""" pourover.models
 
-This module contains the CEFLog object and related functions
+This module contains the underlying objects that make this package work
 
 :copyright: (c) Zachary Hart
 :license: Apache 2.0, see LICENSE for more details.
