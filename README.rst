@@ -62,6 +62,13 @@ Some stuff we can do:
     # stick this message right onto that log (it'll even order the messages by timestamp - wow!)
     log.append(message)
 
+Installing :computer:
+---------------------
+
+To install Pourover, simply run
+
+.. code:: pip install pourover
+
 Features :crocodile:
 --------------------
 
