@@ -13,8 +13,8 @@ import re
 from collections import OrderedDict
 from datetime import datetime
 
-from .exceptions import CEFLineError, IncompleteLineError
-from .models import CEFLine, CEFLog
+from .exceptions import CEFMessageError, IncompleteMessageError
+from .models import CEFMessage, CEFLog
 
 
 # regular expressions needed for parsing, kept out of the functions for ease of reading
@@ -33,7 +33,7 @@ def parse_line(line):
     :param line: A CEF formatted line, beginning with a CEF header and ending in any present extensions
     :type line: str
     :return: The parsed line object
-    :rtype: :class:`CEFLine <CEFLine>`
+    :rtype: :class:`CEFMessage <CEFMessage>`
     """
     if not isinstance(line, str):
         raise TypeError('CEF Lines must be strings')
@@ -42,14 +42,14 @@ def parse_line(line):
     split_at_header = re.search(HEADER_SEP, line)
     if not split_at_header:
         # If we can't match anything
-        raise CEFLineError('A valid CEF header could not be found!')
+        raise CEFMessageError('A valid CEF header could not be found!')
 
     header = split_at_header.group(1)
     extensions = split_at_header.group(2)
 
     if header is None:
         # If a valid header couldn't be found
-        raise CEFLineError('A valid CEF header could not be found!')
+        raise CEFMessageError('A valid CEF header could not be found!')
 
     # Create some empty dicts for later
     header_dict = OrderedDict()
@@ -77,8 +77,8 @@ def parse_line(line):
     for pair in extension_pairs:
         extension_dict[pair[0]] = pair[1]
 
-    # Create a CEFLine object and populate it
-    cefline = CEFLine()
+    # Create a CEFMessage object and populate it
+    cefline = CEFMessage()
 
     cefline.extensions = extension_dict
     cefline.headers = header_dict
@@ -139,7 +139,7 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     :type timestamp: datetime
     :type hostname: str
     :return: A created line object
-    :rtype: :class:`CEFLine <CEFLine>`
+    :rtype: :class:`CEFMessage <CEFMessage>`
     """
     # TODO: Escape special characters in parameters
     # Join our parameters into the header with a pipe character
@@ -150,7 +150,7 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     if set_syslog_prefix:
         if not hostname:
             # We need a hostname to create a syslog prefix
-            raise IncompleteLineError('No hostname was provided for the requests syslog prefix')
+            raise IncompleteMessageError('No hostname was provided for the requests syslog prefix')
         if timestamp:
             syslog_prefix = timestamp.strftime('%b %d %H:%M:%S')
         else:

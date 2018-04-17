@@ -17,15 +17,15 @@ class PouroverException(ValueError):
         super(PouroverException, self).__init__(*args, **kwargs)
 
 
-class CEFLineError(PouroverException):
+class CEFMessageError(PouroverException):
     """ A formatting error was found in a line meant to be in CEF format """
 
 
-class IncompleteLineError(CEFLineError):
-    """ A CEFLine object was blank or contained an incomplete set of data """
+class IncompleteMessageError(CEFMessageError):
+    """ A CEFMessage object was blank or contained an incomplete set of data """
 
 
-class UnsupportedValueError(CEFLineError):
+class UnsupportedValueError(CEFMessageError):
     """ A value found in a CEF line was a value that was unexpected or unsupported """
 
 

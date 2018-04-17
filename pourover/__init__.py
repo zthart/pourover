@@ -20,9 +20,9 @@ from .__version__ import __author__, __author_email__, __license__
 from .__version__ import __copyright__
 
 from .functions import parse_line, parse_file, create_line
-from .models import CEFLog, CEFLine
+from .models import CEFLog, CEFMessage
 from .exceptions import (
-    PouroverException, CEFLineError, IncompleteLineError, UnsupportedValueError, CEFLogError, SyslogPrefixError
+    PouroverException, CEFMessageError, IncompleteMessageError, UnsupportedValueError, CEFLogError, SyslogPrefixError
 )
 
 import logging

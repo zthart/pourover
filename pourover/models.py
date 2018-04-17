@@ -10,14 +10,14 @@ This module contains the underlying objects that make this package work
 
 from datetime import datetime
 
-from .exceptions import IncompleteLineError, SyslogPrefixError
+from .exceptions import IncompleteMessageError, SyslogPrefixError
 from . import functions
 
 
 class CEFLog(object):
     """ The :class:`CEFLog <CEFLog>` object
 
-    This object contains a list of :class:`CEFLine <CEFLine>` objects and exposes them in convenient ways, along with
+    This object contains a list of :class:`CEFMessage <CEFMessage>` objects and exposes them in convenient ways, along with
     some file-wide metadata
     """
 
@@ -28,23 +28,23 @@ class CEFLog(object):
 
     @property
     def linecount(self):
-        """ Returns the number of lines in the log object.
+        """ Returns the number of messages in the log object.
 
-        Uses the ``len()`` builtin to determine the number of log lines currently held by the log
+        Uses the ``len()`` builtin to determine the number of messages currently held by the log
 
-        :return: the number of :class:`CEFLine <CEFLine>` objects currently in the log
+        :return: the number of :class:`CEFMessage <CEFMessage>` objects currently in the log
         :rtype: int
         """
         return len(self.lines)
 
     @property
     def start_time(self):
-        """ Returns the timestamp of the first line in this log.
+        """ Returns the timestamp of the first message in this log.
 
-        If the log is not empty (the length of the array holding lines is > 0), this property will hold the timestamp
+        If the log is not empty (the length of the array holding messages is > 0), this property will hold the timestamp
         of the earliest message in the log
 
-        :return: the timestamp of the first :class:`CEFLine <CEFLine>` in the log
+        :return: the timestamp of the first :class:`CEFMessage <CEFMessage>` in the log
         :rtype: datetime
         """
         if not self.is_empty:
@@ -54,12 +54,12 @@ class CEFLog(object):
 
     @property
     def end_time(self):
-        """ Returns the timestamp of the last line in this log.
+        """ Returns the timestamp of the last message in this log.
 
-        If the log is not empty (the length of the arry holding lines is > 0), this property will hold the timestamp
+        If the log is not empty (the length of the array holding messages is > 0), this property will hold the timestamp
         of the last message in the log
 
-        :return: the timestamp of the last :class:`CEFLine <CEFLine>` in the log
+        :return: the timestamp of the last :class:`CEFMessage <CEFMessage>` in the log
         :rtype: datetime
         """
         if not self.is_empty:
@@ -69,10 +69,10 @@ class CEFLog(object):
 
     @property
     def has_syslog_prefix(self):
-        """ Returns True if the entries in the log have a syslog prefix.
+        """ Returns True if the messages in the log have a syslog prefix.
 
-        This attribute determines whether or not the log was created with lines that contain a syslog prefix. If the
-        log object is empty (has no lines), this property will default to ``False``
+        This attribute determines whether or not the log was created with messages that contain a syslog prefix. If the
+        log object is empty (has no messages), this property will default to ``False``
 
         :return: ``True`` the first line added to this log contains a syslog prefix, ``False`` otherwise, or if the log
             has no lines
@@ -92,18 +92,18 @@ class CEFLog(object):
         return '<CEFLog [%s line%s]>' % (self.linecount, 's' if self.linecount != 1 else '')
 
     def __iter__(self):
-        """ Allows you to use the log object as an iterator to interact with the lines. """
+        """ Allows you to use the log object as an iterator to interact with the messages. """
         return self.lines.__iter__()
 
     def append(self, line):
-        """ Add a line to the log
+        """ Add a message to the log
 
-        Add a :class:`CEFLine <CEFLine>` object or correctly formatted CEF string to
+        Add a :class:`CEFMessage <CEFMessage>` object or correctly formatted CEF string to
 
         :param line:
         :return:
         """
-        if not isinstance(line, (CEFLine, str)):
+        if not isinstance(line, (CEFMessage, str)):
             raise TypeError('Attempting to append %s to a CEFLog object' % type(line))
 
         if isinstance(line, str):
@@ -118,10 +118,10 @@ class CEFLog(object):
                 self.lines.sort(key=lambda l: l.timestamp)
 
     def search_header(self, query, start_time=None, end_time=None):
-        """ Rudimentary search of the headers of the lines contained within this log
+        """ Rudimentary search of the headers of the messages contained within this log
 
-        Search through the headers of all lines present in this log for the value provided, optionally with a start and
-        end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
+        Search through the headers of all messages present in this log for the value provided, optionally with a start
+        and end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
 
         :param query: The value for which to search
         :param start_time: (optional) a start time to search from - defaults to time of first message in log if
@@ -131,15 +131,15 @@ class CEFLog(object):
         :type start_time: datetime
         :type end_time: datetime
         :return: a list of log messages that contain the provided query
-        :rtype: list of :class:`CEFLine <CEFLine>`
+        :rtype: list of :class:`CEFMessage <CEFMessage>`
         """
         pass
 
     def search_extensions(self, query, start_time=None, end_time=None):
-        """ Rudimentary search of the extensions of the lines contained within this log
+        """ Rudimentary search of the extensions of the messages contained within this log
 
-        Search through the extensions of all lines present in this log for the value provided, optionally with a start
-        and end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
+        Search through the extensions of all messages present in this log for the value provided, optionally with a
+        start and end timestamp. Timestamps will be ignored for logs whose entries do not have syslog prefixes.
 
         :param query: The value for which to search
         :param start_time: (optional) A start time to search from - default to time of first message in log if not
@@ -149,13 +149,13 @@ class CEFLog(object):
         :type start_time: datetime
         :type end_time: datetime
         :return: a list of log messages that contain the provided query
-        :rtype: list of :class:`CEFLine <CEFLine>`
+        :rtype: list of :class:`CEFMessage <CEFMessage>`
         """
         pass
 
 
-class CEFLine(object):
-    """ The :class:`CEFLine <CEFLine>` object
+class CEFMessage(object):
+    """ The :class:`CEFMessage <CEFMessage>` object
 
     This object contains the header and extension data of a CEF line, and exposes some of the data within in convenient
     ways
@@ -173,7 +173,7 @@ class CEFLine(object):
         self.headers = {}
 
     def __repr__(self):
-        return '<CEFLine [%s]>' % self._raw_header
+        return '<CEFMessage [%s]>' % self._raw_header
 
     def __str__(self):
         return self._raw_line
