@@ -62,8 +62,8 @@ Some stuff we can do:
     # stick this message right onto that log (it'll even order the messages by timestamp - wow!)
     log.append(message)
 
-:crocodile: Features :crocodile:
---------------------------------
+Features :crocodile:
+--------------------
 
 -  :dragon_face: Create CEF-formatted log lines from parameters with
    support for extensions and a syslog prefix
@@ -75,8 +75,8 @@ Some stuff we can do:
    extensions with ease
 -  :dragon_face: **And more to come...**
 
-:dragon: Contributing :dragon:
-------------------------------
+Contributing :dragon:
+---------------------
 
 | :bug: **Bugs:**
 | Please create any issues you think I should check out! If there's a
@@ -90,8 +90,8 @@ Some stuff we can do:
   but I'd me more than happy to have a discussion with you about a new
   feature you'd like to see!
 
-:snake: Get in Touch :snake:
-----------------------------
+Get in Touch :snake:
+--------------------
 
 *If you've found a Bug or would like to make a feature request, please
 see the **Contributing** section above, thanks!*
