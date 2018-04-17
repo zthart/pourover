@@ -65,15 +65,11 @@ Some stuff we can do:
 Features :crocodile:
 --------------------
 
--  :dragon_face: Create CEF-formatted log lines from parameters with
-   support for extensions and a syslog prefix
--  :dragon_face: Create useful line objects from a string, or an entire
-   log object from a file
--  :dragon_face: Iterable log objects to manipulate collections of logs
-   at once
--  :dragon_face: Parse lines with or without syslog prefixes *or*
-   extensions with ease
--  :dragon_face: **And more to come...**
+| - :dragon_face: Create CEF-formatted log lines from parameters with support for extensions and a syslog prefix
+| - :dragon_face: Create useful line objects from a string, or an entire log object from a file
+| - :dragon_face: Iterable log objects to manipulate collections of logs at once
+| - :dragon_face: Parse lines with or without syslog prefixes *or* extensions with ease
+| - :dragon_face: **And more to come...**
 
 Contributing :dragon:
 ---------------------
