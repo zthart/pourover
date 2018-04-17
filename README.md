@@ -31,24 +31,24 @@ for message in log:
     # iterate through each message in the log like you'd expect to be able to
     pass
 
-# Create line objects from a string
-line = pourover.parse_line('Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2')
+# Create message objects from a string
+message = pourover.parse_line('Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2')
 
-if line.has_syslog_prefix:
-    if line.timestamp > datetime(year=2018, month=4, day=20):
+if message.has_syslog_prefix:
+    if message.timestamp > datetime(year=2018, month=4, day=20):
         # perform an operation on logs from later than April 20th, 2018
         pass
 
-if 'src' in line.extensions:
+if 'src' in message.extensions:
     # do something if it's got an extension called 'src'
     pass
     
-if line.headers['DeviceVendor'] == 'Some Vendor':
+if message.headers['DeviceVendor'] == 'Some Vendor':
     # do something if the vendor is Some Vendor
     pass
 
-# stick this line right onto that log (it'll even order the lines by timestamp - wow!)
-log.append(line)
+# stick this message right onto that log (it'll even order the messages by timestamp - wow!)
+log.append(message)
 ```
 
 ## :crocodile: Features :crocodile:
