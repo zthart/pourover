@@ -3,13 +3,21 @@ Pourover: Log Parsing for Lizards
 
 |license| |python| |pypi|
 
+.. image:: https://img.shields.io/badge/license-Apache%202.0-blue.svg
+    :target: LICENSE
+
+.. image:: https://img.shields.io/badge/python-2.7,%203.6-blue.svg
+    :target: https://pypi.org/project/pourover/
+
+.. image:: https://img.shields.io/badge/pypi-v0.1.0b2-green.svg
+    :target: https://pypi.org/project/pourover/
+
 Pourover is the only *chemicaly-altered* CEF Log Parsing library for
 Python, ideal for consumption by Lizard People.
 
 .. figure:: https://user-images.githubusercontent.com/4873335/38774515-0f0b5514-4039-11e8-8437-facadd57a85c.jpg
    :alt: the requests guy does it so maybe it'll work for me
 
-   the requests guy does it so maybe it'll work for me
 
 Some stuff we can do:
 
@@ -60,15 +68,15 @@ Some stuff we can do:
 :crocodile: Features :crocodile:
 --------------------------------
 
--  :dragon\_face: Create CEF-formatted log lines from parameters with
+-  :dragon_face: Create CEF-formatted log lines from parameters with
    support for extensions and a syslog prefix
--  :dragon\_face: Create useful line objects from a string, or an entire
+-  :dragon_face: Create useful line objects from a string, or an entire
    log object from a file
--  :dragon\_face: Iterable log objects to manipulate collections of logs
+-  :dragon_face: Iterable log objects to manipulate collections of logs
    at once
--  :dragon\_face: Parse lines with or without syslog prefixes *or*
+-  :dragon_face: Parse lines with or without syslog prefixes *or*
    extensions with ease
--  :dragon\_face: **And more to come...**
+-  :dragon_face: **And more to come...**
 
 :dragon: Contributing :dragon:
 ------------------------------
