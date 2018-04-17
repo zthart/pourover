@@ -67,7 +67,9 @@ Installing :computer:
 
 To install Pourover, simply run
 
-.. code:: pip install pourover
+.. code-block:: bash
+    $ pip install pourover
+    :sparkles::crocodile::sparkles:
 
 Features :crocodile:
 --------------------
