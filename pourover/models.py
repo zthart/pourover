@@ -98,10 +98,11 @@ class CEFLog(object):
     def append(self, line):
         """ Add a message to the log
 
-        Add a :class:`CEFMessage <CEFMessage>` object or correctly formatted CEF string to
+        Add a :class:`CEFMessage <CEFMessage>` object or correctly formatted CEF string to the log - messages are
+        guaranteed to be placed in ascending time order (i.e. older messages first, newest message last).
 
-        :param line:
-        :return:
+        :param line: The message to add
+        :type line: :class:`CEFMessage <CEFMessage>` or str
         """
         if not isinstance(line, (CEFMessage, str)):
             raise TypeError('Attempting to append %s to a CEFLog object' % type(line))
