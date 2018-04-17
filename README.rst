@@ -1,8 +1,6 @@
 Pourover: Log Parsing for Lizards
 =================================
 
-|license| |python| |pypi|
-
 .. image:: https://img.shields.io/badge/license-Apache%202.0-blue.svg
     :target: LICENSE
 
@@ -18,10 +16,9 @@ Python, ideal for consumption by Lizard People.
 .. figure:: https://user-images.githubusercontent.com/4873335/38774515-0f0b5514-4039-11e8-8437-facadd57a85c.jpg
    :alt: the requests guy does it so maybe it'll work for me
 
-
 Some stuff we can do:
 
-.. code:: python
+.. code-block:: python
 
     from datetime import datetime
     import pourover
