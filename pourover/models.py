@@ -10,15 +10,14 @@ This module contains the underlying objects that make this package work
 
 from datetime import datetime
 
-from .exceptions import IncompleteMessageError, SyslogPrefixError
-from . import functions
+from .exceptions import SyslogPrefixError
 
 
 class CEFLog(object):
     """ The :class:`CEFLog <CEFLog>` object
 
-    This object contains a list of :class:`CEFMessage <CEFMessage>` objects and exposes them in convenient ways, along with
-    some file-wide metadata
+    This object contains a list of :class:`CEFMessage <CEFMessage>` objects and exposes them in convenient ways, along
+    with some file-wide metadata
     """
 
     def __init__(self):
@@ -98,17 +97,14 @@ class CEFLog(object):
     def append(self, line):
         """ Add a message to the log
 
-        Add a :class:`CEFMessage <CEFMessage>` object or correctly formatted CEF string to the log - messages are
+        Add a :class:`CEFMessage <CEFMessage>` object to the log - messages are
         guaranteed to be placed in ascending time order (i.e. older messages first, newest message last).
 
         :param line: The message to add
-        :type line: :class:`CEFMessage <CEFMessage>` or str
+        :type line: :class:`CEFMessage <CEFMessage>`
         """
-        if not isinstance(line, (CEFMessage, str)):
+        if not isinstance(line, CEFMessage):
             raise TypeError('Attempting to append %s to a CEFLog object' % type(line))
-
-        if isinstance(line, str):
-            line = functions.parse_line(line)
 
         if line.has_syslog_prefix ^ self.has_syslog_prefix and not self.is_empty:
             raise SyslogPrefixError('Cannot append lines with headers inconsistent with lines already present',
