@@ -89,5 +89,8 @@ Contributing :dragon:
 Get in Touch :snake:
 --------------------
 
-_If you've found a Bug or would like to make a feature request, please
-see the **Contributing** section above, thanks!_
+If you've found a Bug or would like to make a feature request, please
+see the **Contributing** section above, thanks!
+
+If you'd like to reach out, shoot me an email at
+.. _zach@csh.rit.edu mailto:zach@csh.rit.edu
