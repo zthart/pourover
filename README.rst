@@ -70,7 +70,7 @@ To install Pourover, simply run
 .. code-block:: bash
 
     $ pip install pourover
-    :sparkles::crocodile::sparkles:
+    ✨🐊✨
 
 Features :crocodile:
 --------------------
