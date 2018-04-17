@@ -89,5 +89,5 @@ Contributing :dragon:
 Get in Touch :snake:
 --------------------
 
-*If you've found a Bug or would like to make a feature request, please
-see the **Contributing** section above, thanks!*
+_If you've found a Bug or would like to make a feature request, please
+see the **Contributing** section above, thanks!_
