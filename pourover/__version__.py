@@ -7,7 +7,7 @@
 
 __title__ = 'pourover'
 __description__ = 'Python CEF Parsing for Lizard People'
-__version__ = '0.1.0b3'
+__version__ = '0.1.0b4'
 __author__ = 'Zach Hart'
 __author_email__ = 'zach@csh.rit.edu'
 __license__ = 'Apache 2.0'

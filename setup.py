@@ -23,6 +23,7 @@ setup(
         version=about['__version__'],
         description=about['__description__'],
         long_description=readme,
+        packages=['pourover'],
         author=about['__author__'],
         author_email=about['__author_email__'],
         url='https://github.com/zthart/pourover',
