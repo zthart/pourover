@@ -155,25 +155,76 @@ class CEFMessage(object):
     """ The :class:`CEFMessage <CEFMessage>` object
 
     This object contains the header and extension data of a CEF line, and exposes some of the data within in convenient
-    ways
+    ways. This object is Immutable, and should only be created using the ``pourover.parse_line()`` or
+    ``pourover.create_line()`` functions.
     """
 
     __attrs__ = [
-        '_extension_count', '_raw_line', '_raw_header'
+        '_raw_line', '_raw_header', '_extensions', '_headers'
     ]
 
     def __init__(self):
-        self._extension_count = 0
         self._raw_line = None
         self._raw_header = None
-        self.extensions = {}
-        self.headers = {}
+        self._extensions = {}
+        self._headers = {}
 
     def __repr__(self):
         return '<CEFMessage [%s]>' % self._raw_header
 
     def __str__(self):
         return self._raw_line
+
+    @property
+    def prefix(self):
+        """ Returns the syslog prefix, if present. """
+        if 'Prefix' in self._headers:
+            return self._headers['Prefix']
+        else:
+            return None
+
+    @property
+    def version(self):
+        """ Returns the CEF Version. """
+        return self._headers['Version']
+
+    @property
+    def device_vendor(self):
+        """ Returns the Device Vendor. """
+        return self._headers['DeviceVendor']
+
+    @property
+    def device_product(self):
+        """ Returns the Device Product. """
+        return self._headers['DeviceProduct']
+
+    @property
+    def device_version(self):
+        """ Returns the Device Version. """
+        return self._headers['DeviceVersion']
+
+    @property
+    def device_event_class_id(self):
+        """ Returns the Device Event Class ID. """
+        return self._headers['DeviceEventClassID']
+
+    @property
+    def device_name(self):
+        """ Returns the Device Name. """
+        return self._headers['Name']
+
+    @property
+    def severity(self):
+        """ Returns the Event Severity. """
+        return self._headers['Severity']
+
+    @property
+    def extensions(self):
+        """ Returns the extensions, if present. """
+        if len(self._extensions) > 0:
+            return self._extensions
+        else:
+            return None
 
     @property
     def has_syslog_prefix(self):
@@ -184,7 +235,7 @@ class CEFMessage(object):
         any line that **does not** have a syslog prefix. Lines without syslog prefixes cannot be added to CEFLog objects
         that contain any line that **does** have a syslog prefix.
         """
-        if 'Prefix' in self.headers:
+        if 'Prefix' in self._headers:
             return True
         else:
             return False
@@ -192,7 +243,7 @@ class CEFMessage(object):
     @property
     def has_extensions(self):
         """ Returns True if the length of the dict of extensions is greater than zero. """
-        return len(self.extensions) > 0
+        return len(self._extensions) > 0
 
     @property
     def timestamp(self):
@@ -207,7 +258,7 @@ class CEFMessage(object):
             return None
         else:
             # Pull only the timestamp from the prefix, ignore the hostname
-            timestamp = ' '.join(self.headers['Prefix'].split(' ')[:-1])
+            timestamp = ' '.join(self._headers['Prefix'].split(' ')[:-1])
             # Parse the timestamp from the string, assume current year
             timestamp = datetime.strptime(timestamp, '%b %d %H:%M:%S')
 

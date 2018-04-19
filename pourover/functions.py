@@ -80,10 +80,8 @@ def parse_line(line):
     # Create a CEFMessage object and populate it
     cefline = CEFMessage()
 
-    cefline.extensions = extension_dict
-    cefline.headers = header_dict
-
-    cefline.__setattr__('_extension_count', len(extension_dict))
+    cefline.__setattr__('_extensions', extension_dict)
+    cefline.__setattr__('_headers', header_dict)
     cefline.__setattr__('_raw_line', line)
     cefline.__setattr__('_raw_header', header)
 
