@@ -39,6 +39,9 @@ Some stuff we can do:
         # perform some operations on a really small log
         pass
 
+    # Find messages with a certain value in the header
+    search_results = log.search_headers('Specific Vendor')
+
     for message in log:
         # iterate through each message in the log like you'd expect to be able to
         pass
@@ -55,7 +58,7 @@ Some stuff we can do:
         # do something if it's got an extension called 'src'
         pass
         
-    if message.headers['DeviceVendor'] == 'Some Vendor':
+    if message.device_vendor == 'Some Vendor':
         # do something if the vendor is Some Vendor
         pass
 
@@ -79,6 +82,7 @@ Features :crocodile:
 | - :dragon_face: Create useful line objects from a string, or an entire log object from a file
 | - :dragon_face: Iterable log objects to manipulate collections of logs at once
 | - :dragon_face: Parse lines with or without syslog prefixes *or* extensions with ease
+| - :dragon_face: Search logs for messages with specific headers or extensions
 | - :dragon_face: **And more to come...**
 
 Contributing :dragon:
