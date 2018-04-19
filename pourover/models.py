@@ -127,12 +127,28 @@ class CEFLog(object):
         :type query: str
         :type start_time: datetime
         :type end_time: datetime
-        :return: a list of log messages that contain the provided query
-        :rtype: list of :class:`CEFMessage <CEFMessage>`
+        :return: a list of log messages that contain the provided query, if any
+        :rtype: list of :class:`CEFMessage <CEFMessage>` if results were found, else ``None``
         """
-        pass
+        if self.has_syslog_prefix:
+            if start_time is None:
+                start_time = self.start_time
+            if end_time is None:
+                end_time = self.end_time
+            search_range = [line for line in self.lines if start_time <= line.timestamp <= end_time]
+        else:
+            search_range = self.lines
 
-    def search_extensions(self, query, start_time=None, end_time=None):
+        results = []
+
+        for line in search_range:
+            header_values = list(line.headers.values())
+            if len([value for value in header_values if query in value]) > 0:
+                results.append(line)
+
+        return results if len(results) > 0 else None
+
+    def search_extensions(self, query, start_time=None, end_time=None, include_keys=False):
         """ Rudimentary search of the extensions of the messages contained within this log
 
         Search through the extensions of all messages present in this log for the value provided, optionally with a
@@ -142,13 +158,36 @@ class CEFLog(object):
         :param start_time: (optional) A start time to search from - default to time of first message in log if not
             provided
         :param end_time: (optional) An end time to search to - defaults to time of last message in log if not provided
+        :param include_keys: (optional) Search through the keys of the extensions in addition to their values, False by
+            default
         :type query: str
         :type start_time: datetime
         :type end_time: datetime
-        :return: a list of log messages that contain the provided query
-        :rtype: list of :class:`CEFMessage <CEFMessage>`
+        :type include_keys: bool
+        :return: a list of log messages that contain the provided query, if any
+        :rtype: list of :class:`CEFMessage <CEFMessage>` if results were found, else ``None``
         """
-        pass
+        if self.has_syslog_prefix:
+            if start_time is None:
+                start_time = self.start_time
+            if end_time is None:
+                end_time = self.end_time
+            search_range = [line for line in self.lines if start_time <= line.timestamp <= end_time]
+        else:
+            search_range = self.lines
+
+        results = []
+
+        for line in search_range:
+            extension_values = list(line.extensions.values())
+            extension_keys = list(line.extensions.keys())
+            if len([value for value in extension_values if query in value]) > 0:
+                results.append(line)
+            elif include_keys:
+                if len([key for key in extension_keys if query in key]) > 0:
+                    results.append(line)
+
+        return results if len(results) > 0 else None
 
 
 class CEFMessage(object):
@@ -225,6 +264,11 @@ class CEFMessage(object):
             return self._extensions
         else:
             return None
+
+    @property
+    def headers(self):
+        """ Returns the headers as a dict """
+        return self._headers
 
     @property
     def has_syslog_prefix(self):
