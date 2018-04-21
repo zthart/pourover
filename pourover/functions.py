@@ -139,7 +139,13 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     :return: A created line object
     :rtype: :class:`CEFMessage <CEFMessage>`
     """
-    # TODO: Escape special characters in parameters
+
+    # Replace any pipes provided in parameters with "escaped" pipes.
+    dev_vendor = dev_vendor.replace('|', '\|')
+    dev_product = dev_product.replace('|', '\|')
+    dev_version = dev_version.replace('|', '\|')
+    name = name.replace('|', '\|')
+
     # Join our parameters into the header with a pipe character
     header = 'CEF:' + '|'.join(
             [str(version), dev_vendor, dev_product, dev_version, str(dev_event_class_id), name, str(severity)]
