@@ -9,7 +9,7 @@ This module contains the underlying objects that make this package work
 """
 
 from datetime import datetime
-
+from copy import deepcopy
 from .exceptions import SyslogPrefixError
 
 
@@ -93,6 +93,10 @@ class CEFLog(object):
     def __iter__(self):
         """ Allows you to use the log object as an iterator to interact with the messages. """
         return self.lines.__iter__()
+
+    def __getitem__(self, index):
+        """ Allows you to use indexing/slicing on the log object in the way you'd expect to be able to. """
+        return self.lines[index]
 
     def append(self, line):
         """ Add a message to the log
@@ -213,6 +217,52 @@ class CEFMessage(object):
 
     def __str__(self):
         return self._raw_line
+
+    def replace(self, prefix=None, version=None, device_vendor=None, device_product=None, device_version=None,
+                device_event=None, device_event_class_id=None, device_name=None, severity=None, extensions=None):
+        """ Returns a new :class:`CEFMessage <CEFMessage>` object cloned from this object, with values replaced with
+        those of the provided optional arguments.
+
+        In general, this function can be used to update existing lines or manipulate lines that may not be consistent
+        into lines that match a format (e.g. add missing extensions, update the name of a device, etc.)::
+
+            # Assume message is a CEFMessage object with the 'src' and 'dest' extensions
+
+            new_message=message.replace(device_vendor='newVendor',
+                                        device_version=message.device_version+'beta1',
+                                        device_name=message.device_name+'Beta',
+                                        extensions={"src": 10.0.0.1,
+                                                    "dest": 10.0.0.2,
+                                                    "host": "newextension.localhost"}
+                                        )
+
+        The result of the above function call will be a new :class:`CEFMessage <CEFMessage>` object with a new
+        ``device_vendor``, ``device_version``, and ``device_name``, and will contain updated values for the ``src``
+        and ``dest`` extensions, along with a new ``host`` extension.
+        """
+        message = deepcopy(self)
+        header_replacements = {
+            'Prefix': prefix,
+            'Version': version,
+            'DeviceVendor': device_vendor,
+            'DeviceProduct': device_product,
+            'DeviceVersion': device_version,
+            'DeviceEvent': device_event,
+            'DeviceEventClassID': device_event_class_id,
+            'Name': device_name,
+            'Severity': severity,
+        }
+
+        # Remove any None values from the dict of replacement headers
+        header_replacements = {k: v for k, v in header_replacements.items() if v is not None}
+        message._headers.update(header_replacements)
+        if extensions is not None:
+            if len(extensions) == 0:
+                message._extensions = {}
+            else:
+                message._extensions.update(extensions)
+
+        return message
 
     @property
     def prefix(self):
