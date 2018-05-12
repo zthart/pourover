@@ -46,6 +46,10 @@ Some stuff we can do:
         # iterate through each message in the log like you'd expect to be able to
         pass
 
+    # Logs can be indexed/sliced in the way you'd expect
+    first_message = log[0]
+    last_message = log[-1]
+
     # Create message objects from a string
     message = pourover.parse_line('Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2')
 
