@@ -10,6 +10,9 @@ Pourover: Log Parsing for Lizards
 .. image:: https://img.shields.io/badge/pypi-v0.1--beta7-green.svg
     :target: https://pypi.org/project/pourover/
 
+.. image:: https://circleci.com/gh/zthart/pourover/tree/develop.svg?style=svg
+    :target: https://circleci.com/gh/zthart/pourover/tree/develop
+
 Pourover is the only *chemicaly-altered* CEF Log Parsing library for
 Python, ideal for consumption by Lizard People.
 
