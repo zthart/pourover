@@ -7,7 +7,7 @@ Pourover: Log Parsing for Lizards
 .. image:: https://img.shields.io/badge/python-3.6,%203.7-blue.svg
     :target: https://pypi.org/project/pourover/
 
-.. image:: https://img.shields.io/badge/pypi-v0.1--beta7-green.svg
+.. image:: https://img.shields.io/badge/pypi-v0.1--beta8-green.svg
     :target: https://pypi.org/project/pourover/
 
 .. image:: https://circleci.com/gh/zthart/pourover/tree/develop.svg?style=svg
