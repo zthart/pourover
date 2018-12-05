@@ -176,8 +176,9 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     for k, v in kwargs.items():
         header += '%s=%s ' % (k, v)
 
-    # remove the trailing space
-    header = header[:-1]
+    # remove the trailing space only if there were headers added
+    if len(kwargs) > 0:
+        header = header[:-1]
 
     cefline = parse_line(header)
     return cefline
