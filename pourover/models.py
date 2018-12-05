@@ -219,7 +219,7 @@ class CEFMessage(object):
         return self._raw_line
 
     def replace(self, prefix=None, version=None, device_vendor=None, device_product=None, device_version=None,
-                device_event=None, device_event_class_id=None, device_name=None, severity=None, extensions=None):
+                device_event_class_id=None, name=None, severity=None, extensions=None):
         """ Returns a new :class:`CEFMessage <CEFMessage>` object cloned from this object, with values replaced with
         those of the provided optional arguments.
 
@@ -230,14 +230,13 @@ class CEFMessage(object):
 
             new_message=message.replace(device_vendor='newVendor',
                                         device_version=message.device_version+'beta1',
-                                        device_name=message.device_name+'Beta',
                                         extensions={"src": 10.0.0.1,
                                                     "dest": 10.0.0.2,
                                                     "host": "newextension.localhost"}
                                         )
 
         The result of the above function call will be a new :class:`CEFMessage <CEFMessage>` object with a new
-        ``device_vendor``, ``device_version``, and ``device_name``, and will contain updated values for the ``src``
+        ``device_vendor`` and ``device_version``, and will contain updated values for the ``src``
         and ``dest`` extensions, along with a new ``host`` extension.
         """
         message = deepcopy(self)
@@ -247,9 +246,8 @@ class CEFMessage(object):
             'DeviceVendor': device_vendor,
             'DeviceProduct': device_product,
             'DeviceVersion': device_version,
-            'DeviceEvent': device_event,
             'DeviceEventClassID': device_event_class_id,
-            'Name': device_name,
+            'Name': name,
             'Severity': severity,
         }
 
@@ -298,8 +296,8 @@ class CEFMessage(object):
         return self._headers['DeviceEventClassID']
 
     @property
-    def device_name(self):
-        """ Returns the Device Name. """
+    def name(self):
+        """ Returns the Event Name. """
         return self._headers['Name']
 
     @property
