@@ -25,15 +25,7 @@ class CEFLog(object):
 
         self.lines = []
 
-    @property
-    def linecount(self):
-        """ Returns the number of messages in the log object.
-
-        Uses the ``len()`` builtin to determine the number of messages currently held by the log
-
-        :return: the number of :class:`CEFMessage <CEFMessage>` objects currently in the log
-        :rtype: int
-        """
+    def __len__(self):
         return len(self.lines)
 
     @property

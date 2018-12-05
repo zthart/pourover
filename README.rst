@@ -4,11 +4,14 @@ Pourover: Log Parsing for Lizards
 .. image:: https://img.shields.io/badge/license-Apache%202.0-blue.svg
     :target: LICENSE
 
-.. image:: https://img.shields.io/badge/python-2.7,%203.6-blue.svg
+.. image:: https://img.shields.io/badge/python-3.6,%203.7-blue.svg
     :target: https://pypi.org/project/pourover/
 
-.. image:: https://img.shields.io/badge/pypi-v0.1--beta7-green.svg
+.. image:: https://img.shields.io/badge/pypi-v0.1--beta8-green.svg
     :target: https://pypi.org/project/pourover/
+
+.. image:: https://circleci.com/gh/zthart/pourover/tree/develop.svg?style=svg
+    :target: https://circleci.com/gh/zthart/pourover/tree/develop
 
 Pourover is the only *chemicaly-altered* CEF Log Parsing library for
 Python, ideal for consumption by Lizard People.
@@ -27,8 +30,8 @@ Some stuff we can do:
     # Create log objects from a file
     log = pourover.parse_file('test.log')
 
-    # useful properties like linecount and start_time
-    if log.linecount > 10:
+    # check the length pythonically - expose useful properties
+    if len(log) > 10:
         if log.has_syslog_prefix and log.start_time > datetime(year=2018, month=4, day=20):
             # perform some operations
             pass
