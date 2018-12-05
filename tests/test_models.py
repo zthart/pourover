@@ -27,18 +27,18 @@ class TestPourover:
         assert line._raw_line is not None
         assert line._raw_header is not None
         assert len(line._extensions) == 2
-        assert len(line._headers) == 9
+        assert len(line._headers) == 8
         assert line.prefix is not None
         assert line.version == 0
         assert line.device_vendor == 'Test Vendor'
-        assert line.device_prodct == 'Test Product'
+        assert line.device_product == 'Test Product'
         assert line.device_version == 'Test Version'
-        assert line.device_event_class_id == 100
-        assert line.device_name == 'Test Name'
+        assert line.device_event_class_id == '100'
+        assert line.name == 'Test Name'
         assert line.severity == 100
         assert line.extensions is not None
         assert len(line.extensions) == 2
         assert line.headers is not None
-        assert len(line.headers) == 9
+        assert len(line.headers) == 8
         assert line.has_extensions
         assert line.timestamp is not None
