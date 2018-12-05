@@ -13,7 +13,7 @@ import re
 from collections import OrderedDict
 from datetime import datetime
 
-from .exceptions import CEFMessageError, IncompleteMessageError
+from .exceptions import CEFMessageError, IncompleteMessageError, UnsupportedValueError
 from .models import CEFMessage, CEFLog
 
 
@@ -64,13 +64,19 @@ def parse_line(line):
         header_dict['Prefix'] = split_at_syslog_prefix.group(0)
 
     # Add all headers into our dict
-    header_dict['Version'] = header_values[0].split(' ')[-1].split(':')[1]
+    try:
+        header_dict['Version'] = int(header_values[0].split(' ')[-1].split(':')[1])
+    except ValueError:
+        raise UnsupportedValueError('The CEF Version field must be an integer!')
     header_dict['DeviceVendor'] = header_values[1]
     header_dict['DeviceProduct'] = header_values[2]
     header_dict['DeviceVersion'] = header_values[3]
     header_dict['DeviceEventClassID'] = header_values[4]
     header_dict['Name'] = header_values[5]
-    header_dict['Severity'] = header_values[6]
+    try:
+        header_dict['Severity'] = int(header_values[6])
+    except ValueError:
+        raise UnsupportedValueError('The CEF Severity field must be an integer!')
 
     # Split up our extensions and insert them into their own dict
     extension_pairs = re.findall(EXTENSION_MATCH, extensions)
@@ -170,8 +176,9 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     for k, v in kwargs.items():
         header += '%s=%s ' % (k, v)
 
-    # remove the trailing space
-    header = header[:-1]
+    # remove the trailing space only if there were headers added
+    if len(kwargs) > 0:
+        header = header[:-1]
 
     cefline = parse_line(header)
     return cefline
