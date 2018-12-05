@@ -21,6 +21,10 @@ class TestPourover:
     def test_factory_availability(self):
         pourover.parse_line(SAMPLE_LINE)
         pourover.create_line(**SAMPLE_EXPLODE)
+    
+    def test_object_availability(self):
+        pourover.CEFLog()
+        pourover.CEFMessage()
 
     def test_parse_correctness(self):
         line = pourover.parse_line(SAMPLE_LINE)
@@ -42,3 +46,13 @@ class TestPourover:
         assert len(line.headers) == 8
         assert line.has_extensions
         assert line.timestamp is not None
+
+    def test_log_append(self):
+        log = pourover.CEFLog()
+        message = pourover.parse_line(SAMPLE_LINE)
+        log.append(message)
+        assert len(log) == 1
+        assert log.has_syslog_prefix
+        assert not log.is_empty
+        assert isinstance(log[0], pourover.CEFMessage)
+

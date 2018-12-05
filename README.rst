@@ -27,8 +27,8 @@ Some stuff we can do:
     # Create log objects from a file
     log = pourover.parse_file('test.log')
 
-    # useful properties like linecount and start_time
-    if log.linecount > 10:
+    # check the length pythonically - expose useful properties
+    if len(log) > 10:
         if log.has_syslog_prefix and log.start_time > datetime(year=2018, month=4, day=20):
             # perform some operations
             pass
