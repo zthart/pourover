@@ -147,10 +147,10 @@ def create_line(version, dev_vendor, dev_product, dev_version, dev_event_class_i
     """
 
     # Replace any pipes provided in parameters with "escaped" pipes.
-    dev_vendor = dev_vendor.replace('|', '\|')
-    dev_product = dev_product.replace('|', '\|')
-    dev_version = dev_version.replace('|', '\|')
-    name = name.replace('|', '\|')
+    dev_vendor = dev_vendor.replace('|', r'\|')
+    dev_product = dev_product.replace('|', r'\|')
+    dev_version = dev_version.replace('|', r'\|')
+    name = name.replace('|', r'\|')
 
     # Join our parameters into the header with a pipe character
     header = 'CEF:' + '|'.join(
