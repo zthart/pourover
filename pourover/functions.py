@@ -20,7 +20,7 @@ from .models import CEFMessage, CEFLog
 # regular expressions needed for parsing, kept out of the functions for ease of reading
 HEADER_SEP = r'(.*(?<!\\)\|){,7}(.*)'
 HEADER_SPLIT = r'(?<!\\)\|'
-SYSLOG_SEP = r'[a-zA-Z]{3}\s+[0-9]{,2}\s(?:[[0-9]{2}:*){3}\s+\w+'
+SYSLOG_SEP = r'[a-zA-Z]{3}\s+[0-9]{,2}\s(?:[0-9]{2}:*){3}\s+\w+'
 EXTENSION_MATCH = r'([^=\s]+)=((?:[\\]=|[^=])+)(?:\s|$)'
 
 
