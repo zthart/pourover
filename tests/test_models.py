@@ -4,6 +4,7 @@
 
 import pourover
 import pytest
+from datetime import datetime
 
 SAMPLE_LINE = 'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
 SAMPLE_EXPLODE = {
@@ -46,6 +47,7 @@ class TestPourover:
         assert len(line.headers) == 8
         assert line.has_extensions
         assert line.timestamp is not None
+        assert line.timestamp == datetime.strptime('Apr 15 22:11:20', '%b %d %H:%M:%S').replace(year=2018)
 
     def test_log_append(self):
         log = pourover.CEFLog()
