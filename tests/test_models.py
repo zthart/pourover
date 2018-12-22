@@ -47,7 +47,7 @@ class TestPourover:
         assert len(line.headers) == 8
         assert line.has_extensions
         assert line.timestamp is not None
-        assert line.timestamp == datetime.strptime('Apr 15 22:11:20', '%b %d %H:%M:%S').replace(year=2018)
+        assert line.timestamp == datetime.strptime('Apr 15 22:11:20', '%b %d %H:%M:%S').replace(year=line.timestamp.year)
 
     def test_log_append(self):
         log = pourover.CEFLog()
