@@ -4,8 +4,12 @@
 
 import pourover
 import pytest
+from datetime import datetime
 
 SAMPLE_LINE = 'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_TAG_SPACE = 'Apr 15 22:11:20 testhost CEF: 0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_EXTENSION_SPACE = 'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100| src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_TAG_EXTENSION_SPACE = 'Apr 15 22:11:20 testhost CEF: 0|Test Vendor|Test Product|Test Version|100|Test Name|100| src=1.1.1.1 dst=1.1.1.2'
 SAMPLE_EXPLODE = {
     'version': 0,
     'dev_vendor': 'Test Vendor',
@@ -26,8 +30,14 @@ class TestPourover:
         pourover.CEFLog()
         pourover.CEFMessage()
 
-    def test_parse_correctness(self):
-        line = pourover.parse_line(SAMPLE_LINE)
+    @pytest.mark.parametrize('test_line', [
+        SAMPLE_LINE,
+        SAMPLE_LINE_TAG_SPACE,
+        SAMPLE_LINE_EXTENSION_SPACE,
+        SAMPLE_LINE_TAG_EXTENSION_SPACE
+    ])
+    def test_parse_correctness(self, test_line):
+        line = pourover.parse_line(test_line)
         assert line._raw_line is not None
         assert line._raw_header is not None
         assert len(line._extensions) == 2
@@ -42,10 +52,13 @@ class TestPourover:
         assert line.severity == 100
         assert line.extensions is not None
         assert len(line.extensions) == 2
+        assert line.extensions['src'] == '1.1.1.1'
+        assert line.extensions['dst'] == '1.1.1.2'
         assert line.headers is not None
         assert len(line.headers) == 8
         assert line.has_extensions
         assert line.timestamp is not None
+        assert line.timestamp == datetime.strptime('Apr 15 22:11:20', '%b %d %H:%M:%S').replace(year=line.timestamp.year)
 
     def test_log_append(self):
         log = pourover.CEFLog()
