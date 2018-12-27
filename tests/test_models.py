@@ -7,6 +7,9 @@ import pytest
 from datetime import datetime
 
 SAMPLE_LINE = 'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_TAG_SPACE = 'Apr 15 22:11:20 testhost CEF: 0|Test Vendor|Test Product|Test Version|100|Test Name|100|src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_EXTENSION_SPACE = 'Apr 15 22:11:20 testhost CEF:0|Test Vendor|Test Product|Test Version|100|Test Name|100| src=1.1.1.1 dst=1.1.1.2'
+SAMPLE_LINE_TAG_EXTENSION_SPACE = 'Apr 15 22:11:20 testhost CEF: 0|Test Vendor|Test Product|Test Version|100|Test Name|100| src=1.1.1.1 dst=1.1.1.2'
 SAMPLE_EXPLODE = {
     'version': 0,
     'dev_vendor': 'Test Vendor',
@@ -27,8 +30,14 @@ class TestPourover:
         pourover.CEFLog()
         pourover.CEFMessage()
 
-    def test_parse_correctness(self):
-        line = pourover.parse_line(SAMPLE_LINE)
+    @pytest.mark.parametrize('test_line', [
+        SAMPLE_LINE,
+        SAMPLE_LINE_TAG_SPACE,
+        SAMPLE_LINE_EXTENSION_SPACE,
+        SAMPLE_LINE_TAG_EXTENSION_SPACE
+    ])
+    def test_parse_correctness(self, test_line):
+        line = pourover.parse_line(test_line)
         assert line._raw_line is not None
         assert line._raw_header is not None
         assert len(line._extensions) == 2
