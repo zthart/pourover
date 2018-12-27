@@ -52,6 +52,8 @@ class TestPourover:
         assert line.severity == 100
         assert line.extensions is not None
         assert len(line.extensions) == 2
+        assert line.extensions['src'] == '1.1.1.1'
+        assert line.extensions['dst'] == '1.1.1.2'
         assert line.headers is not None
         assert len(line.headers) == 8
         assert line.has_extensions
